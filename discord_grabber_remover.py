@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import queue
+import tempfile
 import threading
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
@@ -102,7 +103,21 @@ def main():
     parser = argparse.ArgumentParser(description="Analisa scripts do módulo Discord desktop core.")
     parser.add_argument("--scan", action="store_true", help="executa análise em linha de comando")
     parser.add_argument("--path", type=Path, help="pasta Discord contendo app-*")
+    parser.add_argument("--demo", action="store_true", help="simula um arquivo suspeito em pasta temporária")
     args = parser.parse_args()
+    if args.demo:
+        with tempfile.TemporaryDirectory(prefix="discord-grabber-demo-") as temporary:
+            root = Path(temporary) / "Discord" / "app-demo" / "modules" / "discord_desktop_core-demo" / "discord_desktop_core"
+            root.mkdir(parents=True)
+            (root / "demo.js").write_text(
+                "// SIMULAÇÃO INOFENSIVA: nenhum token real\n"
+                "const token = localStorage.getItem('token');\n"
+                "fetch('https://discord.com/api/webhooks/000000000000000000/demo');\n",
+                encoding="utf-8",
+            )
+            result = scan([root.parents[3]])
+            print(json.dumps(result.as_dict(), ensure_ascii=False, indent=2))
+            return 0 if result.findings else 1
     if args.scan:
         roots = [args.path] if args.path else discover_roots()
         result = scan(roots)

@@ -12,6 +12,8 @@ cd DiscordGrabberRemover
 py discord_grabber_remover.py
 ```
 
+Se o comando `py` não existir no Windows, use `python discord_grabber_remover.py` ou dê duplo clique em `iniciar.bat`. Se `python` também não for reconhecido, instale Python 3.10 ou superior e marque **Add python.exe to PATH** durante a instalação.
+
 Não há bibliotecas externas para instalar. Clique em **Verificar Discord**; se a instalação não for encontrada, escolha a pasta que contém os diretórios `app-*`. Selecione um resultado para conferir os motivos e o SHA-256. O botão de quarentena atua somente sobre o arquivo selecionado, após confirmação. Feche o Discord antes da operação; mover um arquivo essencial pode impedir sua inicialização. A cópia e um arquivo JSON de restauração ficam em `%LOCALAPPDATA%\DiscordGrabberRemover\quarantine`. Use **Restaurar quarentena** e selecione o JSON correspondente. A restauração não sobrescreve arquivos existentes.
 
 Para análise sem interface:
@@ -21,6 +23,8 @@ py discord_grabber_remover.py --scan
 py discord_grabber_remover.py --scan --path "C:\Users\USUARIO\AppData\Local\Discord"
 py -m unittest -v
 ```
+
+Para testar a detecção sem usar uma instalação real, execute `python discord_grabber_remover.py --demo`. O programa cria uma simulação temporária com padrões fictícios, mostra o achado em JSON e remove a pasta ao terminar.
 
 O resultado da linha de comando é JSON; código 2 indica que não foram encontradas instalações ou houve avisos de leitura. Um resultado vazio não prova que a instalação está limpa.
 
